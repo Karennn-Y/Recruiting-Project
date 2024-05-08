@@ -8,6 +8,7 @@ import com.example.recruitingproject.enums.RecruitmentStatus;
 import com.example.recruitingproject.repository.CompanyMemberRepository;
 import com.example.recruitingproject.repository.RecruitmentRepository;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,5 +46,17 @@ public class RecruitmentService {
     public RecruitmentDTO.Response getRecruitment(Long recruitmentId) {
         return recruitmentRepository.findById(recruitmentId)
                                     .orElseThrow(() -> new RuntimeException("해당 공고 없음!!!")).toDTO();
+    }
+
+    @Transactional
+    public RecruitmentDTO.Response updateRecruitment(Long recruitmentId, RecruitmentDTO.Request request) {
+        // TODO 해당 공고의 진짜 주인인지 조회 필요
+        Recruitment recruitment = recruitmentRepository.findById(recruitmentId)
+                                                        .orElseThrow(() -> new RuntimeException("해당 공고 없음!!!"));
+        if (!Objects.equals(recruitment.getCompanyMember().getLoginId(),
+                                                            request.companyLoginId()))
+            throw new RuntimeException("잘못된 기업 정보입니다!!!");
+        // TODO 맞을 경우엔 업데이트 -> transactional update 처리
+        return recruitment.update(request).toDTO();
     }
 }
