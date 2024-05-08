@@ -53,10 +53,20 @@ public class RecruitmentService {
         // TODO 해당 공고의 진짜 주인인지 조회 필요
         Recruitment recruitment = recruitmentRepository.findById(recruitmentId)
                                                         .orElseThrow(() -> new RuntimeException("해당 공고 없음!!!"));
-        if (!Objects.equals(recruitment.getCompanyMember().getLoginId(),
-                                                            request.companyLoginId()))
+        if (!Objects.equals(recruitment.getCompanyMember().getLoginId(), request.companyLoginId()))
             throw new RuntimeException("잘못된 기업 정보입니다!!!");
         // TODO 맞을 경우엔 업데이트 -> transactional update 처리
         return recruitment.update(request).toDTO();
+    }
+
+    @Transactional
+    public void deleteRecruitment(Long recruitmentId,  RecruitmentDTO.Request request) {
+        // TODO 해당 공고의 진짜 주인인지 조회 필요
+        Recruitment recruitment = recruitmentRepository.findById(recruitmentId)
+            .orElseThrow(() -> new RuntimeException("해당 공고 없음!!!"));
+        if (!Objects.equals(recruitment.getCompanyMember().getLoginId(), request.companyLoginId()))
+            throw new RuntimeException("잘못된 기업 정보입니다!!!");
+        // TODO 맞을 경우엔 삭제
+        recruitmentRepository.deleteById(recruitmentId);
     }
 }
