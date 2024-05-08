@@ -1,5 +1,6 @@
 package com.example.recruitingproject.entity;
 
+import com.example.recruitingproject.dto.RecruitmentDTO;
 import com.example.recruitingproject.enums.RecruitmentStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -53,5 +54,20 @@ public class Recruitment {
     // 자동으로 status OPEN 으로 설정
     public void setOpen() {
         this.status = RecruitmentStatus.OPEN;
+    }
+
+    // parsing
+    public RecruitmentDTO.Response toDTO() {
+        return RecruitmentDTO.Response.builder()
+                                        .recruitmentId(this.id)
+                                        .title(this.title)
+                                        .recruiterCount(this.recruiterCount)
+                                        .closingDate(this.closingDate)
+                                        .status(this.status)
+                                        .modifyDate(this.modifyDate)
+                                        .postingDate(this.postingDate)
+                                        .companyMemberId(this.companyMember.getId())
+                                        .companyName(this.companyMember.getCompanyName())
+                                        .build();
     }
 }

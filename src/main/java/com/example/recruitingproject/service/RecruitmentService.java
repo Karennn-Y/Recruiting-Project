@@ -1,10 +1,14 @@
 package com.example.recruitingproject.service;
 
 import com.example.recruitingproject.dto.RecruitmentDTO;
+import com.example.recruitingproject.dto.RecruitmentDTO.Response;
 import com.example.recruitingproject.entity.CompanyMember;
 import com.example.recruitingproject.entity.Recruitment;
+import com.example.recruitingproject.enums.RecruitmentStatus;
 import com.example.recruitingproject.repository.CompanyMemberRepository;
 import com.example.recruitingproject.repository.RecruitmentRepository;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,5 +33,17 @@ public class RecruitmentService {
         recruitment.setOpen();
 
         recruitmentRepository.save(recruitment);
+    }
+
+    @Transactional(readOnly = true) // 성능으로 인해 옵션 넣어주는것이 좋다 (훨신 가볍기 때문에)
+    public List<RecruitmentDTO.Response> getRecruitmentList() {
+        List<Recruitment> recruitments = recruitmentRepository.findAllByStatus(RecruitmentStatus.OPEN);
+        return recruitments.stream().map(Recruitment::toDTO).toList();
+    }
+
+    @Transactional(readOnly = true) // 성능으로 인해 옵션 넣어주는것이 좋다 (훨신 가볍기 때문에)
+    public RecruitmentDTO.Response getRecruitment(Long recruitmentId) {
+        return recruitmentRepository.findById(recruitmentId)
+                                    .orElseThrow(() -> new RuntimeException("해당 공고 없음!!!")).toDTO();
     }
 }
