@@ -1,6 +1,9 @@
 package com.example.recruitingproject.entity;
 
+import com.example.recruitingproject.dto.RecruitmentDTO;
 import com.example.recruitingproject.enums.RecruitmentStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -18,6 +21,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -27,6 +31,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class Recruitment {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -47,4 +52,33 @@ public class Recruitment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_member_id")
     private CompanyMember companyMember;
+
+    // 자동으로 status OPEN 으로 설정
+    public void setOpen() {
+        this.status = RecruitmentStatus.OPEN;
+    }
+
+    // parsing
+    public RecruitmentDTO.Response toDTO() {
+        return RecruitmentDTO.Response.builder()
+                                        .recruitmentId(this.id)
+                                        .title(this.title)
+                                        .recruiterCount(this.recruiterCount)
+                                        .closingDate(this.closingDate)
+                                        .status(this.status)
+                                        .modifyDate(this.modifyDate)
+                                        .postingDate(this.postingDate)
+                                        .companyMemberId(this.companyMember.getId())
+                                        .companyName(this.companyMember.getCompanyName())
+                                        .build();
+    }
+
+    // update
+    public Recruitment update(RecruitmentDTO.Request request) {
+        this.title = request.title();
+        this.recruiterCount = request.recruiterCount();
+        this.closingDate = request.closingDate();
+        this.status = request.status();
+        return this;
+    }
 }
