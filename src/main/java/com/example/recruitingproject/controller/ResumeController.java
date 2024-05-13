@@ -4,6 +4,7 @@ import com.example.recruitingproject.dto.ResumeDTO;
 import com.example.recruitingproject.service.ResumeService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,5 +38,11 @@ public class ResumeController {
     public ResumeDTO.Response updateResume (@PathVariable(name = "id") Long resumeId,
                                             @RequestBody ResumeDTO.Request request) {
         return resumeService.updateResume(resumeId, request);
+    }
+
+    @DeleteMapping("/resumes/{id}")
+    public void deleteResume(@PathVariable(name = "id") Long resumeId,
+                            @RequestBody ResumeDTO.Request request) {
+        resumeService.deleteResume(resumeId, request);
     }
 }

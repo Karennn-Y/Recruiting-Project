@@ -57,4 +57,14 @@ public class ResumeService {
         }
         return resume.update(request).toDTO();
     }
+
+    @Transactional
+    public void deleteResume(Long resumeId, ResumeDTO.Request request) {
+        Resume resume = resumeRepository.findById(resumeId)
+            .orElseThrow(() -> new RuntimeException("해당 이력서 없음!!"));
+        if (!Objects.equals(resume.getMember().getLoginId(), request.loginId())) {
+            throw new RuntimeException("잘못된 로그인 아이디 입니다!");
+        }
+        resumeRepository.deleteById(resumeId);
+    }
 }
