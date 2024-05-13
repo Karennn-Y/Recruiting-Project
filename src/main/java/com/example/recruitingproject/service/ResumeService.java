@@ -6,6 +6,7 @@ import com.example.recruitingproject.entity.Resume;
 import com.example.recruitingproject.repository.MemberRepository;
 import com.example.recruitingproject.repository.ResumeRepository;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,5 +46,15 @@ public class ResumeService {
                                         .orElseThrow(() -> new RuntimeException("회원정보 일치하지 않습니다 / 이력서 없음!!"));
 
         return resume.toDTO();
+    }
+
+    @Transactional
+    public ResumeDTO.Response updateResume(Long resumeId, ResumeDTO.Request request) {
+        Resume resume = resumeRepository.findById(resumeId)
+                                        .orElseThrow(() -> new RuntimeException("해당 이력서 없음!!"));
+        if (!Objects.equals(resume.getMember().getLoginId(), request.loginId())) {
+            throw new RuntimeException("잘못된 로그인 아이디 입니다!");
+        }
+        return resume.update(request).toDTO();
     }
 }

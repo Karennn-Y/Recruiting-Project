@@ -13,7 +13,8 @@ public class ResumeDTO {
     public record Request (
         String title,
         List<EducationDTO> educationList,
-        String loginId
+        String loginId,
+        ResumeStatus status
     ) {
         public Resume toEntity () {
            return Resume.builder()

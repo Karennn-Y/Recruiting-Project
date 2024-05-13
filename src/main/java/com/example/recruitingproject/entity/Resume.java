@@ -73,4 +73,16 @@ public class Resume {
             .memberName(this.member.getName())
             .build();
     }
+
+    public Resume update(ResumeDTO.Request request) {
+        this.title = request.title();
+        this.educationList = request.educationList().stream()
+                                                    .map(e -> Education.builder()
+                                                                    .degree(e.degree())
+                                                                    .school(e.school())
+                                                                    .build())
+                                                    .toList();
+        this.status = request.status();
+        return this;
+    }
 }
