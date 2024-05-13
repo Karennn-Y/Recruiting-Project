@@ -39,11 +39,12 @@ public class Resume {
 
     @Convert(converter = EducationListJsonConverter.class)
     @Column(columnDefinition = "TEXT")
-    private List<Education> education;
+    private List<Education> educationList;
 
     @Enumerated(EnumType.STRING)
     private ResumeStatus status;
 
+    @Column(updatable = false)
     @CreationTimestamp
     private LocalDateTime postingDate;
     @UpdateTimestamp
@@ -52,4 +53,8 @@ public class Resume {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    public void setOpen() {
+        this.status = ResumeStatus.OPEN;
+    }
 }
