@@ -1,11 +1,8 @@
 package com.example.recruitingproject.dto;
 
 import com.example.recruitingproject.entity.Education;
-import com.example.recruitingproject.entity.Recruitment;
 import com.example.recruitingproject.entity.Resume;
-import com.example.recruitingproject.enums.RecruitmentStatus;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonFormat.Shape;
+import com.example.recruitingproject.enums.ResumeStatus;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
@@ -31,20 +28,20 @@ public class ResumeDTO {
         }
     }
 
-//    @Builder
-//    @Getter
-//    public static class Response {
-//        private Long recruitmentId;
-//        private String title;
-//        private Integer recruiterCount;
-//        private LocalDateTime closingDate;
-//        private RecruitmentStatus status;
-//        private LocalDateTime modifyDate;
-//        private LocalDateTime postingDate;
-//        private Long companyMemberId;
-//        private String companyName;
-//    }
+    @Builder
+    @Getter
+    public static class Response {
+        private Long resumeId;
+        private String title;
+        private List<EducationDTO> educationList;
+        private ResumeStatus status;
+        private LocalDateTime postingDate;
+        private LocalDateTime modifyDate;
+        private Long memberId;
+        private String memberName;
+    }
 
+    @Builder
     public record EducationDTO (
         String school,
         Integer degree

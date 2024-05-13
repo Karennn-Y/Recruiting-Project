@@ -5,7 +5,7 @@ import com.example.recruitingproject.entity.Member;
 import com.example.recruitingproject.entity.Resume;
 import com.example.recruitingproject.repository.MemberRepository;
 import com.example.recruitingproject.repository.ResumeRepository;
-import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,5 +26,24 @@ public class ResumeService {
         resume.setMember(member);
         resume.setOpen();
         resumeRepository.save(resume);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ResumeDTO.Response> getResumeList (String loginId) {
+        Member member = memberRepository.findByLoginId(loginId)
+                                        .orElseThrow(() -> new RuntimeException("가입된 회원 정보 없음!!!"));
+        List<Resume> resumes = resumeRepository.findAllByMember(member);
+        return resumes.stream().map(Resume::toDTO).toList();
+    }
+
+    // TODO : 추후 개발 방향에 따라 로직 변경 필수
+    @Transactional(readOnly = true)
+    public ResumeDTO.Response getResume(Long resumeId, String loginId) {
+        Member member = memberRepository.findByLoginId(loginId)
+                                        .orElseThrow(() -> new RuntimeException("가입된 회원 정보 없음!!!"));
+        Resume resume = resumeRepository.findByIdAndMember(resumeId, member)
+                                        .orElseThrow(() -> new RuntimeException("회원정보 일치하지 않습니다 / 이력서 없음!!"));
+
+        return resume.toDTO();
     }
 }

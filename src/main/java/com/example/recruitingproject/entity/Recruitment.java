@@ -2,8 +2,6 @@ package com.example.recruitingproject.entity;
 
 import com.example.recruitingproject.dto.RecruitmentDTO;
 import com.example.recruitingproject.enums.RecruitmentStatus;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

@@ -1,5 +1,6 @@
 package com.example.recruitingproject.entity;
 
+import com.example.recruitingproject.dto.ResumeDTO;
 import com.example.recruitingproject.enums.ResumeStatus;
 import com.example.recruitingproject.util.EducationListJsonConverter;
 import jakarta.persistence.Column;
@@ -44,7 +45,7 @@ public class Resume {
     @Enumerated(EnumType.STRING)
     private ResumeStatus status;
 
-    @Column(updatable = false)
+//    @Column(updatable = false) -> 해결 완 ㅠ update (dirty check) 잡음.. jojoldu 참고..
     @CreationTimestamp
     private LocalDateTime postingDate;
     @UpdateTimestamp
@@ -56,5 +57,20 @@ public class Resume {
 
     public void setOpen() {
         this.status = ResumeStatus.OPEN;
+    }
+
+    public ResumeDTO.Response toDTO() {
+        return ResumeDTO.Response.builder()
+            .resumeId(this.id)
+            .title(this.title)
+            .educationList(this.educationList.stream()
+                                        .map(Education::toDTO)
+                                        .toList())
+            .status(this.status)
+            .postingDate(this.postingDate)
+            .modifyDate(this.modifyDate)
+            .memberId(this.member.getId())
+            .memberName(this.member.getName())
+            .build();
     }
 }
