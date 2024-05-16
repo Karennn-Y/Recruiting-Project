@@ -40,11 +40,10 @@ public class ResumeService {
     // TODO : 추후 개발 방향에 따라 로직 변경 필수
     @Transactional(readOnly = true)
     public ResumeDTO.Response getResume(Long resumeId, String loginId) {
-        Member member = memberRepository.findByLoginId(loginId)
-                                        .orElseThrow(() -> new RuntimeException("가입된 회원 정보 없음!!!"));
-        Resume resume = resumeRepository.findByIdAndMember(resumeId, member)
-                                        .orElseThrow(() -> new RuntimeException("회원정보 일치하지 않습니다 / 이력서 없음!!"));
-
+        Resume resume = resumeRepository.findById(resumeId)
+                                        .orElseThrow(() -> new RuntimeException("이력서 없음!!"));
+        if (!Objects.equals(resume.getMember().getLoginId(), loginId))
+            throw new RuntimeException("잘못된 로그인 아이디 입니다!");
         return resume.toDTO();
     }
 
