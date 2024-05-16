@@ -57,4 +57,9 @@ public class RecruitmentController {
     public void cancelApplication(@RequestBody ApplicationDTO.Request request) {
         recruitmentService.cancelApplication(request);
     }
+
+    @DeleteMapping("/recruitments/applications")
+    public void deleteApplication(@RequestBody ApplicationDTO.Request request) {
+        recruitmentService.deleteApplication(request);
+    }
 }

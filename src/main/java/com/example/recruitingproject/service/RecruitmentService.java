@@ -102,4 +102,13 @@ public class RecruitmentService {
             throw new RuntimeException("일치하지 않는 회원 정보입니다!");
         application.setStatus(ApplicationStatus.CANCELED);
     }
+
+    @Transactional
+    public void deleteApplication(ApplicationDTO.Request request) {
+        Application application = applicationRepository.findById(request.applicationId())
+            .orElseThrow(() -> new RuntimeException("지원 내역이 존재하지 않습니다."));
+        if (!Objects.equals(application.getResume().getMember().getId(), request.memberId()))
+            throw new RuntimeException("일치하지 않는 회원 정보입니다!");
+        applicationRepository.deleteById(request.applicationId());
+    }
 }
