@@ -52,4 +52,9 @@ public class RecruitmentController {
         @RequestBody ApplicationDTO.Request request) {
         recruitmentService.applyRecruitment(recruitmentId, request);
     }
+
+    @PutMapping("/recruitments/applications")
+    public void cancelApplication(@RequestBody ApplicationDTO.Request request) {
+        recruitmentService.cancelApplication(request);
+    }
 }
