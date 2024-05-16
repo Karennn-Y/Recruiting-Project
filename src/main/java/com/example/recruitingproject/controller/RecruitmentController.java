@@ -1,5 +1,6 @@
 package com.example.recruitingproject.controller;
 
+import com.example.recruitingproject.dto.ApplicationDTO;
 import com.example.recruitingproject.dto.RecruitmentDTO;
 import com.example.recruitingproject.service.RecruitmentService;
 import java.util.List;
@@ -44,5 +45,11 @@ public class RecruitmentController {
     public void deleteRecruitment(@PathVariable(name = "id") Long recruitmentId,
                                     @RequestBody RecruitmentDTO.Request request) {
         recruitmentService.deleteRecruitment(recruitmentId, request);
+    }
+
+    @PostMapping("/recruitments/{id}/applications")
+    public void applyRecruitment(@PathVariable(name = "id") Long recruitmentId,
+        @RequestBody ApplicationDTO.Request request) {
+        recruitmentService.applyRecruitment(recruitmentId, request);
     }
 }
