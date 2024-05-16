@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
@@ -61,5 +62,11 @@ public class RecruitmentController {
     @DeleteMapping("/recruitments/applications")
     public void deleteApplication(@RequestBody ApplicationDTO.Request request) {
         recruitmentService.deleteApplication(request);
+    }
+
+    @GetMapping("/recruitments/{id}/applications")
+    public List<ApplicationDTO.Response> getApplications(@PathVariable(name = "id") Long recruitmentId,
+        @RequestParam Long companyMemberId) {
+        return recruitmentService.getApplications(recruitmentId, companyMemberId);
     }
 }

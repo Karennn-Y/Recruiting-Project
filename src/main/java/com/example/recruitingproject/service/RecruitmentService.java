@@ -2,6 +2,7 @@ package com.example.recruitingproject.service;
 
 import com.example.recruitingproject.dto.ApplicationDTO;
 import com.example.recruitingproject.dto.RecruitmentDTO;
+import com.example.recruitingproject.dto.ResumeDTO.EducationDTO;
 import com.example.recruitingproject.entity.Application;
 import com.example.recruitingproject.entity.CompanyMember;
 import com.example.recruitingproject.entity.Recruitment;
@@ -12,6 +13,7 @@ import com.example.recruitingproject.repository.ApplicationRepository;
 import com.example.recruitingproject.repository.CompanyMemberRepository;
 import com.example.recruitingproject.repository.RecruitmentRepository;
 import com.example.recruitingproject.repository.ResumeRepository;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -110,5 +112,26 @@ public class RecruitmentService {
         if (!Objects.equals(application.getResume().getMember().getId(), request.memberId()))
             throw new RuntimeException("일치하지 않는 회원 정보입니다!");
         applicationRepository.deleteById(request.applicationId());
+    }
+
+    @Transactional(readOnly = true)
+    public List<ApplicationDTO.Response> getApplications(Long recruitmentId, Long companyMemberId) {
+        // TODO : valid 한 기업회원 정보인가?
+        companyMemberRepository.findById(companyMemberId)
+                                    .orElseThrow(() -> new RuntimeException("기업 회원 정보 없음!!!"));
+        // TODO : 지원자들 정보 조회
+        List<Application> applicationList = applicationRepository.findAllByRecruitmentId(recruitmentId);
+        return applicationList.stream()
+                                .map(a -> ApplicationDTO.Response.builder()
+                                                                    .applicationId(a.getId())
+                                                                    .status(a.getStatus())
+                                                                    .appliedDate(a.getAppliedDate())
+                                                                    .resumeId(a.getResume().getId())
+                                                                    .resumeTitle(a.getResume().getTitle())
+                                                                    .educationList(a.getResume().toDTO()
+                                                                                    .getEducationList())
+                                                                    .name(a.getResume().getMember().getName())
+                                                                    .build())
+                                .toList();
     }
 }
