@@ -1,7 +1,6 @@
 package com.example.recruitingproject.service;
 
 import com.example.recruitingproject.dto.RecruitmentDTO;
-import com.example.recruitingproject.dto.RecruitmentDTO.Response;
 import com.example.recruitingproject.entity.CompanyMember;
 import com.example.recruitingproject.entity.Recruitment;
 import com.example.recruitingproject.enums.RecruitmentStatus;
@@ -9,7 +8,6 @@ import com.example.recruitingproject.repository.CompanyMemberRepository;
 import com.example.recruitingproject.repository.RecruitmentRepository;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
